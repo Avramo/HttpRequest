@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HttpRequest</title>
+        <style>
+            .stat{
+                display: inline-block;
+                width: 25px;
+                height: 25px;
+                background-color: green;
+            }
+            .stat.w8{ background-color: orange; }
+            .shhh{ opacity: 0.5; }
+            input{
+                width: 25px;
+                height: 25px;
+            }
+        </style>
+</head>
+<body>
+
+    <div id="tasks">
+        <span>Title:</span>
+        <br>
+        <input type="checkbox">
+        <span class="stat"></span>
+        <br>
+        <button  onclick="next()">Next</button>
+
+    </div>
+
+    
+    <script>
+        let index = 0;
+
+        function populateTask(taskItem){
+            let taskDiv = document.getElementById('tasks');
+            taskDiv.querySelector('span').innerHTML = taskItem.title;
+            taskDiv.querySelector('input').checked = taskItem.completed;
+            taskDiv.querySelector('button').disabled = '';
+            taskDiv.querySelector('span.stat').className = 'stat';
+            taskDiv.className = '';
+        }
+
+        function next(){
+            document.querySelector('.stat').className = 'stat w8';
+            document.querySelector('#tasks').className = 'shhh';
+            document.querySelector('button').disabled = 'disabled';
+
+            let x = new XMLHttpRequest();
+            x.onload = function(){
+                let item = JSON.parse(this.responseText)
+                console.log(item);
+                populateTask(item);
+            };
+            x.open("GET", "https://jsonplaceholder.typicode.com/todos/" + (++index) );
+            x.send();
+        }
+
+    </script>
+    
+</body>
+</html>
